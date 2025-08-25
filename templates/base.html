@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Daily Balance{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="#" id="dashboard-link">Dashboard</a></li>
+                <li><a href="#" id="login-link">Login</a></li>
+                <li><a href="#" id="register-link">Register</a></li>
+                <li><a href="#" id="logout-link" style="display:none;">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="content">
+        {% block content %}
+        <div id="home-content">
+            <h1>Welcome to Daily Balance</h1>
+            <p>Organize your day, balance your life</p>
+        </div>
+        
+        <div id="auth-forms" style="display:none;">
+            <div id="login-form">
+                <h2>Login</h2>
+                <input type="text" id="username" placeholder="Username">
+                <input type="password" id="password" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
+            
+            <div id="register-form" style="display:none;">
+                <h2>Register</h2>
+                <input type="text" id="reg-username" placeholder="Username">
+                <input type="email" id="reg-email" placeholder="Email">
+                <input type="password" id="reg-password" placeholder="Password">
+                <input type="password" id="reg-password2" placeholder="Confirm Password">
+                <button onclick="register()">Register</button>
+            </div>
+        </div>
+        
+        <div id="dashboard" style="display:none;">
+            <h2>Your Tasks</h2>
+            <div id="tasks-container"></div>
+            <button onclick="showTaskForm()">Add New Task</button>
+            
+            <div id="task-form" style="display:none;">
+                <h3>Add Task</h3>
+                <input type="text" id="task-title" placeholder="Title">
+                <textarea id="task-description" placeholder="Description"></textarea>
+                <input type="time" id="task-start-time">
+                <input type="time" id="task-end-time">
+                <button onclick="createTask()">Create Task</button>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Daily Balance</p>
+    </footer>
+
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h2>Your Daily Tasks</h2>
+    <button id="add-task-btn" class="btn btn-primary">Add New Task</button>
+</div>
+
+<div class="task-form-container" id="task-form-container" style="display: none;">
+    <h3>Add New Task</h3>
+    <form id="task-form">
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select a category</option>
+                <!-- Categories will be populated by JavaScript -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="start_time">Start Time</label>
+            <input type="time" id="start_time" name="start_time" required>
+        </div>
+        <div class="form-group">
+            <label for="end_time">End Time</label>
+            <input type="time" id="end_time" name="end_time" required>
+        </div>
+        <div class="form-group">
+            <label for="priority">Priority</label>
+            <select id="priority" name="priority">
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="checkbox" id="is_recurring" name="is_recurring">
+                Recurring Task
+            </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Task</button>
+        <button type="button" id="cancel-task-btn" class="btn btn-secondary">Cancel</button>
+    </form>
+</div>
+
+<div class="tasks-container" id="tasks-container">
+    <!-- Tasks will be populated by JavaScript -->
+</div>
+{% endblock %}
