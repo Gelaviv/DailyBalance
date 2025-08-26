@@ -4,6 +4,7 @@ from django.utils import timezone
 from accounts.models import User
 from tasks.models import Task
 from datetime import date, timedelta
+import calendar
 
 class DailySchedule(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='daily_schedules')
@@ -38,6 +39,7 @@ class DailySchedule(models.Model):
         recurring_tasks = Task.objects.filter(
             user=self.user, 
             is_recurring=True,
+            is_completed=False,
             date__lte=self.date  # Tasks that should have started by this date
         )
         
@@ -45,7 +47,7 @@ class DailySchedule(models.Model):
             # Check if this task should occur on this date based on recurrence pattern
             if self.should_occur_today(task):
                 # Create or get the daily task
-                daily_task, created = DailyTask.objects.get_or_create(
+                    DailyTask.objects.get_or_create(
                     schedule=self,
                     original_task=task,
                     defaults={
@@ -71,10 +73,27 @@ class DailySchedule(models.Model):
             return days_diff >= 0 and days_diff % 7 == 0  # Same day each week
         
         elif task.recurrence_pattern == 'monthly':
-            # Simple monthly recurrence (same day of month)
-            return days_diff >= 0 and self.date.day == task.date.day
+
+            if task.date.day > 28:  # Handle edge cases for months with fewer days
+                last_day = calendar.monthrange(self.date.year, self.date.month)[1]
+                return self.date.day == last_day and task.date.day >= last_day
+            else:
+                return self.date.day == task.date.day
         
         return False
+    
+
+    def add_manual_task(self, title, category, start_time, end_time, description="", priority="medium"):
+        """Add a manual task to the schedule"""
+        return DailyTask.objects.create(
+            schedule=self,
+            title=title,
+            category=category,
+            description=description,
+            start_time=start_time,
+            end_time=end_time,
+            priority=priority,
+        )
 
 
 class DailyTask(models.Model):
@@ -117,6 +136,7 @@ class DailyTask(models.Model):
         start = self.start_time.hour + self.start_time.minute / 60
         end = self.end_time.hour + self.end_time.minute / 60
         return round(end - start, 2)
+
 
 
 class ProgressStreak(models.Model):
@@ -175,3 +195,9 @@ class Reminder(models.Model):
     
     def should_send_now(self):
         return not self.is_sent and timezone.now() >= self.reminder_time
+
+
+    def mark_as_sent(self):
+        self.is_sent = True
+        self.sent_at = timezone.now()
+        self.save()
