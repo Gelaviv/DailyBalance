@@ -13,4 +13,5 @@ urlpatterns = [
     path('tasks/', views.TaskListCreateView.as_view(), name='task-list'),
     path('tasks/today/', views.TodayTaskListView.as_view(), name='today-task-list'),
     path('tasks/<int:pk>/', views.TaskDetailView.as_view(), name='task-detail'),
+    path('tasks/recurring/', views.RecurringTaskListView.as_view(), name='recurring-task-list'),
 ]
