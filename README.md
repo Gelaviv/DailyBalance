@@ -92,36 +92,364 @@ daily-balance/
 
 * POST /api/auth/register/ - User registration
 
+### Headers:
+
+* Content-Type: application/json
+
+```
+{
+  "username": "testuser3",
+  "email": "test3@example.com",
+  "password": "testpassword12",
+  "password2": "testpassword12",
+  "first_name": "Test3",
+  "last_name": "User3"
+}
+
+
+**Expected Response: 201 Created**
+
+{
+  "user": {
+    "id": 1,
+    "username": "testuser3",
+    "email": "test3@example.com",
+    "first_name": "Test3",
+    "last_name": "User3"
+  },
+  "refresh": "eyJ...",
+  "access": "eyJ...",
+  "message": "User created successfully"
+}
+
+```
+
 * POST /api/auth/login/ - User login
+### Headers:
+
+* Content-Type: application/json
+
+```
+{
+  "username": "testuser3",
+  "password": "testpassword12"
+}
+
+
+Expected Response: 200 OK
+
+{
+  "user": {
+    "id": 1,
+    "username": "testuser3",
+    "email": "test3@example.com",
+    "first_name": "Test3",
+    "last_name": "User3"
+  },
+  "refresh": "eyJ...",
+  "access": "eyJ...",
+  "message": "Login successful"
+}
+
+```
 
 * POST /api/auth/logout/ - User logout
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+* Content-Type: application/json
+
+```
+{
+  "refresh": "{{refresh_token}}"
+}
+
+Expected Response: 200 OK
+
+{
+  "message": "Logout successful"
+}
+
+```
 
 * GET /api/auth/profile/ - User profile
 
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+{
+  "username": "testuser3",
+  "password": "testpassword12"
+}
+```
+
 * POST /api/auth/change-password/ - Password change
+
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+* Content-Type: application/json
+
+```
+{
+  "old_password": "testpassword12",
+  "new_password": "newpassword123"
+}
+```
 
 ## Tasks
 
 * GET /api/tasks/categories/ - List all categories
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+[
+  {
+    "id": 1,
+    "name": "spiritual",
+    "color": "#FF6B6B"
+  },
+  {
+    "id": 2,
+    "name": "family",
+    "color": "#4ECDC4"
+  }
+]
+```
 
 * GET /api/tasks/tasks/ - List user's tasks
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+[
+  {
+    "id": 1,
+    "category": 1,
+    "title": "Morning Prayer",
+    "description": "Daily morning prayer time",
+    "start_time": "06:00:00",
+    "end_time": "06:30:00",
+    "priority": "high",
+    "is_recurring": true,
+    "is_completed": false,
+    "created_at": "2023-10-05T10:00:00Z",
+    "updated_at": "2023-10-05T10:00:00Z",
+    "category_name": "spiritual",
+    "duration": 0.5
+  }
+]
+```
 
 * POST /api/tasks/tasks/ - Create new task
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+* Content-Type: application/json
+```
+{
+  "category": 1,
+  "title": "Morning Prayer",
+  "description": "Daily morning prayer time",
+  "start_time": "06:00:00",
+  "end_time": "06:30:00",
+  "priority": "high",
+  "is_recurring": true
+}
+
+
+Expected Response: 201 Created
+
+{
+  "id": 1,
+  "category": 1,
+  "title": "Morning Prayer",
+  "description": "Daily morning prayer time",
+  "start_time": "06:00:00",
+  "end_time": "06:30:00",
+  "priority": "high",
+  "is_recurring": true,
+  "is_completed": false,
+  "created_at": "2023-10-05T10:00:00Z",
+  "updated_at": "2023-10-05T10:00:00Z",
+  "category_name": "spiritual",
+  "duration": 0.5
+}
+
+```
 
 * GET /api/tasks/tasks/{id}/ - Get specific task
 
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+{
+  "id": 1,
+  "category": 1,
+  "title": "Morning Prayer",
+  "description": "Daily morning prayer time",
+  "start_time": "06:00:00",
+  "end_time": "06:30:00",
+  "priority": "high",
+  "is_recurring": true,
+  "is_completed": false,
+  "created_at": "2023-10-05T10:00:00Z",
+  "updated_at": "2023-10-05T10:00:00Z",
+  "category_name": "spiritual",
+  "duration": 0.5
+}
+```
+
 * PUT /api/tasks/tasks/{id}/ - Update task
+
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+* Content-Type: application/json
+```
+json
+{
+  "category": 1,
+  "title": "Morning Prayer and Meditation",
+  "description": "Daily morning prayer and meditation time",
+  "start_time": "06:00:00",
+  "end_time": "06:45:00",
+  "priority": "high",
+  "is_recurring": true
+}
+
+Expected Response: 200 OK
+
+{
+  "id": 1,
+  "category": 1,
+  "title": "Morning Prayer and Meditation",
+  "description": "Daily morning prayer and meditation time",
+  "start_time": "06:00:00",
+  "end_time": "06:45:00",
+  "priority": "high",
+  "is_recurring": true,
+  "is_completed": false,
+  "created_at": "2023-10-05T10:00:00Z",
+  "updated_at": "2023-10-05T10:05:00Z",
+  "category_name": "spiritual",
+  "duration": 0.75
+}
+```
 
 * DELETE /api/tasks/tasks/{id}/ - Delete task
 
-* GET /api/tasks/tasks/today/ - Get today's tasks
+### Headers:
 
+* Authorization: Bearer {{access_token}}
+```
+Expected Response: 204 No Content
+```
+
+* GET /api/tasks/tasks/today/ - Get today's tasks
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+[
+  {
+    "id": 1,
+    "category": 1,
+    "title": "Morning Prayer",
+    "description": "Daily morning prayer time",
+    "start_time": "06:00:00",
+    "end_time": "06:30:00",
+    "priority": "high",
+    "is_recurring": true,
+    "is_completed": false,
+    "created_at": "2023-10-05T10:00:00Z",
+    "updated_at": "2023-10-05T10:00:00Z",
+    "category_name": "spiritual",
+    "duration": 0.5
+  }
+]
+
+```
 ## Schedules
 * GET /api/schedules/today/ - Get today's schedule
 
+### Headers:
+
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+{
+  "id": 1,
+  "user": 1,
+  "date": "2023-10-05",
+  "created_at": "2023-10-05T00:00:00Z",
+  "updated_at": "2023-10-05T00:00:00Z",
+  "daily_tasks": [
+    {
+      "id": 1,
+      "title": "Morning Prayer",
+      "category": 1,
+      "start_time": "06:00:00",
+      "end_time": "06:30:00",
+      "priority": "high",
+      "is_completed": false,
+      "category_name": "spiritual",
+      "category_color": "#FF6B6B"
+    }
+  ],
+  "completed_tasks_count": 0,
+  "total_tasks_count": 1,
+  "completion_percentage": 0
+}
+```
+
 * GET /api/schedules/progress/stats/ - Get progress statistics
 
+### Headers:
 
+* Authorization: Bearer {{access_token}}
+
+```
+Expected Response: 200 OK
+
+json
+{
+  "today": {
+    "completed": 0,
+    "total": 1,
+    "percentage": 0
+  },
+  "streak": {
+    "current": 0,
+    "longest": 0
+  },
+  "weekly_avg": 0
+}
+```
 # Installation & Setup
 
 ## Prerequisites
